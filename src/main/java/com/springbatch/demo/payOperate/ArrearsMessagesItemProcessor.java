@@ -13,6 +13,7 @@ public class ArrearsMessagesItemProcessor implements ItemProcessor<Bill, Message
 
         if (item.getPayStatus() == 0){
             Message message = new Message();
+            message.setUser(item.getUser());
             message.setContent("您已欠费");
             return message;
         }

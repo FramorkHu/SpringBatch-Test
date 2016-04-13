@@ -154,10 +154,11 @@
     <bean id="payProcessor" class="com.springbatch.demo.payOperate.PaymentItemProcessor"/>
     <bean id="messageProcessor" class="com.springbatch.demo.payOperate.ArrearsMessagesItemProcessor"/>
 
+    <bean id="taskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor"/>
 
     <batch:job id="billingJob" restartable="true">
         <batch:step id="billingStep" next="payStep">
-            <batch:tasklet>
+            <batch:tasklet throttle-limit="5" task-executor="taskExecutor">
                 <batch:chunk reader="userDbReader" processor="billingProcessor"
                        writer="billDbWriter" commit-interval="5">
                 </batch:chunk>

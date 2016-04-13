@@ -5,8 +5,17 @@ package com.springbatch.demo.model;
  */
 public class Message {
 
+    private long id;
     private User user;
     private String content;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public User getUser() {
         return user;
