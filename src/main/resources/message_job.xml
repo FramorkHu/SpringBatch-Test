@@ -4,10 +4,18 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd">
 
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/springbatch" />
+        <property name="username" value="root" />
+        <property name="password" value="123456" />
+    </bean>
+
     <bean id="messageReader"
                 class="org.springframework.batch.item.file.FlatFileItemReader">
         <property name="lineMapper" ref="lineMapper"/>
-        <property name="resource" value="classpath:/file1"/>
+        <property name="resource" value="file:d:/home/file1"/>
     </bean>
     <bean id="lineMapper"
                 class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
@@ -27,7 +35,8 @@
     <bean id="messageWriter" class="com.springbatch.demo.operate.MessagesItemWriter"/>
 
     <bean id="jobRepository"
-                class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">
+                class="org.springframework.batch.core.repository.support.JobRepositoryFactoryBean">
+        <property name="dataSource" ref="dataSource" />
         <property name="transactionManager" ref="transactionManager" />
     </bean>
 

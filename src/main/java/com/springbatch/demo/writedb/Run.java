@@ -23,10 +23,13 @@ public class Run {
         SimpleJobLauncher launcher = new SimpleJobLauncher();
         launcher.setJobRepository((JobRepository) c.getBean("jobRepository"));
         launcher.setTaskExecutor(new SimpleAsyncTaskExecutor());
+        Map<String, JobParameter> parameterMap = new HashMap<>();
+        JobParameter jobParameter = new JobParameter("aaa11111111");
+        parameterMap.put("aa",jobParameter);
         try {
-            launcher.run((Job) c.getBean("messageJob"), new JobParameters());
-            Thread.sleep(10*1000);
-            launcher.run((Job) c.getBean("messageJob"), new JobParameters());
+            launcher.run((Job) c.getBean("messageJob"), new JobParameters(parameterMap));
+            /*Thread.sleep(10*1000);
+            launcher.run((Job) c.getBean("messageJob"), new JobParameters(parameterMap));*/
         } catch (Exception e) {
             e.printStackTrace();
         }

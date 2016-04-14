@@ -4,17 +4,38 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd">
 
-    <bean id="fileReader" class="com.springbatch.demo.writedb.FileReader">
-        <property name="filePath" value="d:/home/batch.txt"/>
+
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/springbatch" />
+        <property name="username" value="root" />
+        <property name="password" value="123456" />
     </bean>
-    <bean id="fileWrite" class="com.springbatch.demo.writedb.FileWriter">
+
+    <bean id="fileReader"
+          class="org.springframework.batch.item.file.FlatFileItemReader">
+        <property name="lineMapper">
+            <bean class="com.springbatch.demo.writedb.ReadLine"/>
+        </property>
+        <property name="resource" value="file:d:/home/batch.txt"/>
+    </bean>
+
+    <bean id="fileWriter"
+          class="org.springframework.batch.item.file.FlatFileItemWriter">
+        <property name="lineAggregator">
+            <bean class="com.springbatch.demo.writedb.WriteLine"/>
+        </property>
+        <property name="resource" value="file:d:/home/test.txt"/>
+    </bean>
+
+    <!--<bean id="fileWrite" class="com.springbatch.demo.writedb.FileWriter">
         <property name="filePath" value="D:\home\test.txt"/>
-    </bean>
-    <bean id="itemSqlParameterSourceProvider"
-          class="org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider"/>
+    </bean>-->
 
     <bean id="jobRepository"
-                class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">
+          class="org.springframework.batch.core.repository.support.JobRepositoryFactoryBean">
+        <property name="dataSource" ref="dataSource" />
         <property name="transactionManager" ref="transactionManager" />
     </bean>
 
@@ -23,8 +44,8 @@
 
     <batch:job id="messageJob" job-repository="jobRepository">
         <batch:step id="messageStep">
-            <batch:tasklet throttle-limit="2" task-executor="taskExecutor">
-                <batch:chunk reader="fileReader" writer="fileWrite" commit-interval="100000">
+            <batch:tasklet>
+                <batch:chunk reader="fileReader" writer="fileWriter" commit-interval="100000">
 
                 </batch:chunk>
             </batch:tasklet>

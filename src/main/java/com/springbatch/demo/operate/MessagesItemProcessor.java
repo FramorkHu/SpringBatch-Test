@@ -7,11 +7,14 @@ import org.springframework.batch.item.ItemProcessor;
 /**
  * Created by huyan on 2016/4/12.
  */
-public class MessagesItemProcessor implements ItemProcessor<User, User> {
+public class MessagesItemProcessor implements ItemProcessor<User, Message> {
 
     @Override
-    public User process(User user) throws Exception {
-        return user;
+    public Message process(User user) throws Exception {
+        Message message = new Message();
+        message.setUser(user);
+        message.setContent("aaa");
+        return message;
     }
 
 }

@@ -19,15 +19,17 @@ public class Run {
     public static void main(String[] args) {
 
         ClassPathXmlApplicationContext c =
-                new ClassPathXmlApplicationContext("billing_job.xml");
+                new ClassPathXmlApplicationContext("message_job.xml");
         SimpleJobLauncher launcher = new SimpleJobLauncher();
         launcher.setJobRepository((JobRepository) c.getBean("jobRepository"));
         launcher.setTaskExecutor(new SimpleAsyncTaskExecutor());
         Map<String,JobParameter> parameters = new HashMap<String,JobParameter>();
-        parameters.put("month",new JobParameter("2011-10"));
+        parameters.put("month",new JobParameter("2011-12"));
 
         try {
-            launcher.run((Job) c.getBean("billingJob"), new JobParameters(parameters));
+            launcher.run((Job) c.getBean("messageJob"), new JobParameters(parameters));
+            /*Thread.sleep(10*1000);
+            launcher.run((Job) c.getBean("messageJob"), new JobParameters(parameters));*/
         } catch (Exception e) {
             e.printStackTrace();
         }

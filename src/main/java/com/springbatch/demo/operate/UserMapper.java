@@ -12,8 +12,13 @@ public class UserMapper implements FieldSetMapper<User> {
     @Override
     public User mapFieldSet(FieldSet fieldSet) throws BindException {
         User u = new User();
-        u.setName(fieldSet.readString(0));
-        u.setAge(fieldSet.readInt(1));
+        try {
+            u.setName(fieldSet.readString(0));
+            u.setAge(fieldSet.readInt(1));
+        } catch (Exception e){
+            System.out.println(fieldSet);
+        }
         return u;
+
     }
 }
